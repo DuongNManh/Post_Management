@@ -8,9 +8,12 @@ namespace Post_Management.API.Converter
     {
         public AutoMapperProfiles()
         {
-            //CreateMap<Models.Domains.BlogPost, Models.DTOs.BlogPostDTO>().ReverseMap();
             CreateMap<CategoryDTO, Category>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<BlogPostDTO, BlogPost>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<BlogPost, BlogPostDTO>();
         }
     }
 }

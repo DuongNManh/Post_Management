@@ -1,11 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Post_Management.API.Models.Domains
+namespace Post_Management.API.Models.DTOs
 {
-    public class BlogPost
+    public class BlogPostDTO
     {
-        [JsonPropertyName("id")]
-        public Guid Id { get; set; }
         [JsonPropertyName("title")]
         public string Title { get; set; }
         [JsonPropertyName("short_description")]
@@ -20,7 +18,7 @@ namespace Post_Management.API.Models.Domains
         public DateTime PublishDate { get; set; }
         [JsonPropertyName("author")]
         public string Author { get; set; }
-        [JsonIgnore]
+        [JsonPropertyName("is_visible")]
         public bool IsVisible { get; set; }
     }
 }
