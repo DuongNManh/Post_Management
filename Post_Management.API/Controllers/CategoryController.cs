@@ -10,6 +10,7 @@ using System.Globalization;
 using Azure;
 using Post_Management.API.CustomActionFilters;
 using Post_Management.API.Exceptions;
+using Post_Management.API.Models.Responses;
 
 namespace Post_Management.API.Controllers
 {
@@ -32,11 +33,12 @@ namespace Post_Management.API.Controllers
         {
 
             var paginatedResult = await _categoryRepository.GetAllCategories();
+            var categoryResponse = paginatedResult.Select(category => _mapper.Map<CategoryResponse>(category));
 
             var response = ApiResponseBuilder.BuildResponse(
                 statusCode: StatusCodes.Status200OK,
                 message: "Success",
-                data: paginatedResult
+                data: categoryResponse
                 );
 
             return Ok(response);
@@ -73,7 +75,7 @@ namespace Post_Management.API.Controllers
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: 200,
-                    data: category,
+                    data: _mapper.Map<CategoryResponse>(category),
                     message: "Category retrieved successfully");
                 return Ok(response);
             }
@@ -101,7 +103,7 @@ namespace Post_Management.API.Controllers
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: 200,
-                    data: category,
+                    data: _mapper.Map<CategoryResponse>(category),
                     message: "Category updated successfully");
                 return Ok(response);
             }
@@ -128,7 +130,7 @@ namespace Post_Management.API.Controllers
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: 200,
-                    data: category,
+                    data: _mapper.Map<CategoryResponse>(category),
                     message: "Category deleted successfully");
                 return Ok(response);
             }

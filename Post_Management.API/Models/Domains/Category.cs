@@ -11,7 +11,7 @@ namespace Post_Management.API.Models.Domains
         public string Name { get; set; }
         [JsonPropertyName("url_handle")]
         public string UrlHandle { get; set; }
-        [Ignore]
+        [JsonIgnore]
         public ICollection<BlogPost> BlogPosts { get; set; }
     }
 }
