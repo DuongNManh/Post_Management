@@ -13,9 +13,18 @@ namespace Post_Management.API.Repositories
             _dbContext = dbContext;
         }
 
-        public Task<BlogPost> CreateBlogPost(BlogPost blogPost)
+        public async Task<BlogPost> CreateBlogPost(BlogPost blogPost)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _dbContext.BlogPosts.AddAsync(blogPost);
+                await _dbContext.SaveChangesAsync();
+                return blogPost;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<BlogPost?> DeleteBlogPost(Guid id)
@@ -41,7 +50,9 @@ namespace Post_Management.API.Repositories
         {
             try
             {
-                return await _dbContext.BlogPosts.ToListAsync();
+                return await _dbContext.BlogPosts
+                    .Include(x => x.Categories)
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -53,7 +64,9 @@ namespace Post_Management.API.Repositories
         {
             try
             {
-                return await _dbContext.BlogPosts.FirstOrDefaultAsync(x => x.Id == id);
+                return await _dbContext.BlogPosts
+                    .Include(x => x.Categories)
+                    .FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
@@ -81,5 +94,6 @@ namespace Post_Management.API.Repositories
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }

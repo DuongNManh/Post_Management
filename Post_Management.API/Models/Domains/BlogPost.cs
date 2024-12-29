@@ -22,5 +22,7 @@ namespace Post_Management.API.Models.Domains
         public string Author { get; set; }
         [JsonIgnore]
         public bool IsVisible { get; set; }
+        [JsonPropertyName("categories")]
+        public ICollection<Category> Categories { get; set; }
     }
 }

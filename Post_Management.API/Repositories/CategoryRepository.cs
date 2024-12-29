@@ -96,5 +96,27 @@ namespace Post_Management.API.Repositories
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<bool> ValidateCategories(IEnumerable<Guid> categoryIds)
+        {
+            var validCategories = await _dbContext.Categories
+                .Where(c => categoryIds.Contains(c.Id))
+                .CountAsync();
+            return validCategories == categoryIds.Count();
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoriesByIds(IEnumerable<Guid> categoryIds)
+        {
+            try
+            {
+                return await _dbContext.Categories
+                    .Where(c => categoryIds.Contains(c.Id))
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

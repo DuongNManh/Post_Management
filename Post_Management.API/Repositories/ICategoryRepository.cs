@@ -10,5 +10,7 @@ namespace Post_Management.API.Repositories
         Task<Category> CreateCategory(Category category);
         Task<Category?> UpdateCategory(Guid id, Category category);
         Task<Category?> DeleteCategory(Guid id);
+        Task<bool> ValidateCategories(IEnumerable<Guid> categoryIds);
+        Task<IEnumerable<Category>> GetCategoriesByIds(IEnumerable<Guid> categoryIds);
     }
 }

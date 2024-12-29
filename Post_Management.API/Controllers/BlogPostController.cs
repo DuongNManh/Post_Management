@@ -6,6 +6,7 @@ using Post_Management.API.Exceptions;
 using Post_Management.API.Models;
 using Post_Management.API.Models.Domains;
 using Post_Management.API.Models.DTOs;
+using Post_Management.API.Models.Responses;
 using Post_Management.API.Repositories;
 
 namespace Post_Management.API.Controllers
@@ -16,18 +17,21 @@ namespace Post_Management.API.Controllers
     {
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IMapper _mapper;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public BlogPostController(IBlogPostRepository blogPostRepository, IMapper mapper)
+        public BlogPostController(IBlogPostRepository blogPostRepository, IMapper mapper, ICategoryRepository categoryRepository)
         {
             _blogPostRepository = blogPostRepository;
             _mapper = mapper;
+            _categoryRepository = categoryRepository;
         }
 
         //Get:
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var paginatedResult = await _blogPostRepository.GetAllBlogPosts();
+            var blogPosts = await _blogPostRepository.GetAllBlogPosts();
+            var paginatedResult = blogPosts.Select(blogPost => _mapper.Map<BlogPostResponse>(blogPost));
             var response = ApiResponseBuilder.BuildResponse(
                 statusCode: StatusCodes.Status200OK,
                 message: "Success",
@@ -37,7 +41,7 @@ namespace Post_Management.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id: guid}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
             try
@@ -50,7 +54,7 @@ namespace Post_Management.API.Controllers
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Success",
-                    data: blogPost
+                    data: _mapper.Map<BlogPostResponse>(blogPost)
                     );
                 return Ok(response);
             }
@@ -71,15 +75,37 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var createdBlogPost = await _blogPostRepository.CreateBlogPost(_mapper.Map<BlogPost>(valueDTO));
+                // Validate categories before creating the blog post
+                if (valueDTO.Categories != null && valueDTO.Categories.Any())
+                {
+                    var categoriesExist = ValidateCategories(valueDTO.Categories).Result;
+                    if (!categoriesExist)
+                    {
+                        throw new BadRequestException("One or more category IDs are invalid");
+                    }
+                }
+
+                var blogPost = _mapper.Map<BlogPost>(valueDTO);
+
+                // Fetch and assign categories after mapping
+                if (valueDTO.Categories != null)
+                {
+                    blogPost.Categories = (await _categoryRepository.GetCategoriesByIds(valueDTO.Categories)).ToList();
+                }
+
+                var createdBlogPost = await _blogPostRepository.CreateBlogPost(blogPost);
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status201Created,
                     message: "Blog post created successfully",
-                    data: createdBlogPost
+                    data: _mapper.Map<BlogPostResponse>(createdBlogPost)
                     );
                 return CreatedAtAction(nameof(Get),
                     new { id = createdBlogPost.Id },
                     response);
+            }
+            catch (BadRequestException ex)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -89,7 +115,7 @@ namespace Post_Management.API.Controllers
 
         //Put: /api/BlogPost/{id}
         [HttpPut]
-        [Route("{id: guid}")]
+        [Route("{id:guid}")]
         [ValidateModelAttributes]
         public async Task<IActionResult> Put(Guid id, BlogPostDTO blogPostDTO)
         {
@@ -103,7 +129,7 @@ namespace Post_Management.API.Controllers
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Blog post updated successfully",
-                    data: updatedBlogPost
+                    data: _mapper.Map<BlogPostResponse>(updatedBlogPost)
                     );
                 return Ok(response);
             }
@@ -119,7 +145,7 @@ namespace Post_Management.API.Controllers
 
         //Delete: /api/BlogPost/{id}
         [HttpDelete]
-        [Route("{id: guid}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -132,7 +158,7 @@ namespace Post_Management.API.Controllers
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Blog post deleted successfully",
-                    data: deletedBlogPost
+                    data: _mapper.Map<BlogPostResponse>(deletedBlogPost)
                     );
                 return Ok(response);
             }
@@ -144,6 +170,11 @@ namespace Post_Management.API.Controllers
             {
                 throw new Exception("An error occurred while processing your request", ex);
             }
+        }
+
+        private async Task<bool> ValidateCategories(IEnumerable<Guid> categoryIds)
+        {
+            return await _categoryRepository.ValidateCategories(categoryIds);
         }
     }
 }
