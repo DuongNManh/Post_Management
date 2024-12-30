@@ -121,15 +121,34 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var updatedBlogPost = await _blogPostRepository.UpdateBlogPost(id, _mapper.Map<BlogPost>(blogPostDTO));
-                if (updatedBlogPost == null)
+                // Validate categories before creating the blog post
+                if (blogPostDTO.Categories != null && blogPostDTO.Categories.Any())
+                {
+                    var categoriesExist = ValidateCategories(blogPostDTO.Categories).Result;
+                    if (!categoriesExist)
+                    {
+                        throw new BadRequestException("One or more category IDs are invalid");
+                    }
+                }
+
+                var updatedBlogPost = _mapper.Map<BlogPost>(blogPostDTO);
+
+                // Fetch and assign categories after mapping
+                if (blogPostDTO.Categories != null)
+                {
+                    updatedBlogPost.Categories = (await _categoryRepository.GetCategoriesByIds(blogPostDTO.Categories)).ToList();
+                }
+
+                var createdBlogPost = await _blogPostRepository.UpdateBlogPost(id, updatedBlogPost);
+
+                if (createdBlogPost == null)
                 {
                     throw new NotFoundException("Blog post not found");
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Blog post updated successfully",
-                    data: _mapper.Map<BlogPostResponse>(updatedBlogPost)
+                    data: _mapper.Map<BlogPostResponse>(createdBlogPost)
                     );
                 return Ok(response);
             }
