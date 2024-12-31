@@ -85,7 +85,12 @@ namespace Post_Management.API.Repositories
                 }
                 existingBlogPost.Title = blogPost.Title;
                 existingBlogPost.Content = blogPost.Content;
-                //existingBlogPost.CategoryId = blogPost.CategoryId;
+                existingBlogPost.ShortDescription = blogPost.ShortDescription;
+                existingBlogPost.UrlHandle = blogPost.UrlHandle;
+                existingBlogPost.PublishDate = blogPost.PublishDate;
+                existingBlogPost.FeaturedImageUrl = blogPost.FeaturedImageUrl;
+                existingBlogPost.Categories = blogPost.Categories;
+                existingBlogPost.Author = blogPost.Author;
                 await _dbContext.SaveChangesAsync();
                 return existingBlogPost;
             }
