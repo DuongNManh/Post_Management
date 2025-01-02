@@ -18,7 +18,7 @@ namespace Post_Management.API.Models.Responses
         [JsonPropertyName("url_handle")]
         public string UrlHandle { get; set; }
         [JsonPropertyName("publish_date")]
-        public DateTime PublishDate { get; set; }
+        public string PublishDate { get; set; }
         [JsonPropertyName("author")]
         public string Author { get; set; }
         [JsonIgnore]

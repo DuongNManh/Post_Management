@@ -19,6 +19,9 @@ namespace Post_Management.API.Models.DTOs
         [JsonPropertyName("url_handle")]
         [Required]
         public string UrlHandle { get; set; }
+        [JsonPropertyName("publish_date")]
+        [Required]
+        public string PublishDate { get; set; }
         [JsonPropertyName("author")]
         [Required]
         public string Author { get; set; }

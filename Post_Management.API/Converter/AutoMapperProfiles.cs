@@ -18,7 +18,8 @@ namespace Post_Management.API.Converter
                 .ForMember(dest => dest.Categories, opt => opt.Ignore());
 
             CreateMap<BlogPost, BlogPostResponse>()
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories));
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Categories))
+                .ForMember(dest => dest.PublishDate, opt => opt.MapFrom(src => src.PublishDate.ToString("yyyy-MM-dd")));
             CreateMap<Category, CategoryResponse>();
         }
     }

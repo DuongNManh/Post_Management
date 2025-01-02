@@ -78,19 +78,37 @@ namespace Post_Management.API.Repositories
         {
             try
             {
-                var existingBlogPost = await _dbContext.BlogPosts.FirstOrDefaultAsync(x => x.Id == id);
+                var existingBlogPost = await _dbContext.BlogPosts
+                    .Include(x => x.Categories)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
                 if (existingBlogPost == null)
                 {
                     return null;
                 }
+
+                // Update basic properties
                 existingBlogPost.Title = blogPost.Title;
                 existingBlogPost.Content = blogPost.Content;
                 existingBlogPost.ShortDescription = blogPost.ShortDescription;
                 existingBlogPost.UrlHandle = blogPost.UrlHandle;
                 existingBlogPost.PublishDate = blogPost.PublishDate;
                 existingBlogPost.FeaturedImageUrl = blogPost.FeaturedImageUrl;
-                existingBlogPost.Categories = blogPost.Categories;
                 existingBlogPost.Author = blogPost.Author;
+
+                // Update categories
+                // Clear existing categories
+                existingBlogPost.Categories.Clear();
+
+                // Add new categories
+                if (blogPost.Categories != null && blogPost.Categories.Any())
+                {
+                    foreach (var category in blogPost.Categories)
+                    {
+                        existingBlogPost.Categories.Add(category);
+                    }
+                }
+
                 await _dbContext.SaveChangesAsync();
                 return existingBlogPost;
             }
