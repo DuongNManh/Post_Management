@@ -12,13 +12,15 @@ namespace Post_Management.API.Repositories
         {
             try
             {
+                //generate a unique id for the image
+                image.id = Guid.NewGuid();
                 // Upload the image to API/Images (local storage)
-                var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{image.FileName}{image.FileExtension}");
+                var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{image.id}{image.FileExtension}");
                 using var stream = new FileStream(localPath, FileMode.Create);
                 await file.CopyToAsync(stream);
                 // Save the image details to the database
                 var httpReq = (httpContextAccessor.HttpContext?.Request) ?? throw new InvalidOperationException("HttpContext or HttpRequest is null.");
-                var urlPath = $"{httpReq.Scheme}://{httpReq.Host}{httpReq.PathBase}/Images/{image.FileName}{image.FileExtension}";
+                var urlPath = $"{httpReq.Scheme}://{httpReq.Host}{httpReq.PathBase}/Images/{image.id}{image.FileExtension}";
                 image.URl = urlPath;
                 await dbContext.BlogImages.AddAsync(image);
                 await dbContext.SaveChangesAsync();
