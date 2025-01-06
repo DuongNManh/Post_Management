@@ -13,25 +13,15 @@ namespace Post_Management.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogPostController : ControllerBase
+    public class BlogPostController(IBlogPostRepository blogPostRepository, IMapper mapper, ICategoryRepository categoryRepository) : ControllerBase
     {
-        private readonly IBlogPostRepository _blogPostRepository;
-        private readonly IMapper _mapper;
-        private readonly ICategoryRepository _categoryRepository;
-
-        public BlogPostController(IBlogPostRepository blogPostRepository, IMapper mapper, ICategoryRepository categoryRepository)
-        {
-            _blogPostRepository = blogPostRepository;
-            _mapper = mapper;
-            _categoryRepository = categoryRepository;
-        }
 
         //Get:
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var blogPosts = await _blogPostRepository.GetAllBlogPosts();
-            var paginatedResult = blogPosts.Select(blogPost => _mapper.Map<BlogPostResponse>(blogPost));
+            var blogPosts = await blogPostRepository.GetAllBlogPosts();
+            var paginatedResult = blogPosts.Select(blogPost => mapper.Map<BlogPostResponse>(blogPost));
             var response = ApiResponseBuilder.BuildResponse(
                 statusCode: StatusCodes.Status200OK,
                 message: "Success",
@@ -46,7 +36,7 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var blogPost = await _blogPostRepository.GetBlogPostById(id);
+                var blogPost = await blogPostRepository.GetBlogPostById(id);
                 if (blogPost == null)
                 {
                     throw new NotFoundException("Blog post not found");
@@ -54,7 +44,7 @@ namespace Post_Management.API.Controllers
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Success",
-                    data: _mapper.Map<BlogPostResponse>(blogPost)
+                    data: mapper.Map<BlogPostResponse>(blogPost)
                     );
                 return Ok(response);
             }
@@ -85,19 +75,19 @@ namespace Post_Management.API.Controllers
                     }
                 }
 
-                var blogPost = _mapper.Map<BlogPost>(valueDTO);
+                var blogPost = mapper.Map<BlogPost>(valueDTO);
 
                 // Fetch and assign categories after mapping
                 if (valueDTO.Categories != null)
                 {
-                    blogPost.Categories = (await _categoryRepository.GetCategoriesByIds(valueDTO.Categories)).ToList();
+                    blogPost.Categories = (await categoryRepository.GetCategoriesByIds(valueDTO.Categories)).ToList();
                 }
 
-                var createdBlogPost = await _blogPostRepository.CreateBlogPost(blogPost);
+                var createdBlogPost = await blogPostRepository.CreateBlogPost(blogPost);
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status201Created,
                     message: "Blog post created successfully",
-                    data: _mapper.Map<BlogPostResponse>(createdBlogPost)
+                    data: mapper.Map<BlogPostResponse>(createdBlogPost)
                     );
                 return CreatedAtAction(nameof(Get),
                     new { id = createdBlogPost.Id },
@@ -131,15 +121,15 @@ namespace Post_Management.API.Controllers
                     }
                 }
 
-                var updatedBlogPost = _mapper.Map<BlogPost>(blogPostDTO);
+                var updatedBlogPost = mapper.Map<BlogPost>(blogPostDTO);
 
                 // Fetch and assign categories after mapping
                 if (blogPostDTO.Categories != null)
                 {
-                    updatedBlogPost.Categories = (await _categoryRepository.GetCategoriesByIds(blogPostDTO.Categories)).ToList();
+                    updatedBlogPost.Categories = (await categoryRepository.GetCategoriesByIds(blogPostDTO.Categories)).ToList();
                 }
 
-                var createdBlogPost = await _blogPostRepository.UpdateBlogPost(id, updatedBlogPost);
+                var createdBlogPost = await blogPostRepository.UpdateBlogPost(id, updatedBlogPost);
 
                 if (createdBlogPost == null)
                 {
@@ -148,7 +138,7 @@ namespace Post_Management.API.Controllers
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Blog post updated successfully",
-                    data: _mapper.Map<BlogPostResponse>(createdBlogPost)
+                    data: mapper.Map<BlogPostResponse>(createdBlogPost)
                     );
                 return Ok(response);
             }
@@ -169,7 +159,7 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var deletedBlogPost = await _blogPostRepository.DeleteBlogPost(id);
+                var deletedBlogPost = await blogPostRepository.DeleteBlogPost(id);
                 if (deletedBlogPost == null)
                 {
                     throw new NotFoundException("Blog post not found");
@@ -177,7 +167,7 @@ namespace Post_Management.API.Controllers
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: StatusCodes.Status200OK,
                     message: "Blog post deleted successfully",
-                    data: _mapper.Map<BlogPostResponse>(deletedBlogPost)
+                    data: mapper.Map<BlogPostResponse>(deletedBlogPost)
                     );
                 return Ok(response);
             }
@@ -193,7 +183,7 @@ namespace Post_Management.API.Controllers
 
         private async Task<bool> ValidateCategories(IEnumerable<Guid> categoryIds)
         {
-            return await _categoryRepository.ValidateCategories(categoryIds);
+            return await categoryRepository.ValidateCategories(categoryIds);
         }
     }
 }

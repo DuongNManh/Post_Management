@@ -5,7 +5,9 @@ namespace Post_Management.API.Models.DTOs
 {
     public class BlogPostDTO
     {
-        [Required]
+        //[Required]
+        [MinLength(length: 3, ErrorMessage ="Min length title is 3")]
+        [MaxLength(length: 100, ErrorMessage = "Max length title is 100")]
         [JsonPropertyName("title")]
         public string Title { get; set; }
         [Required]

@@ -7,6 +7,10 @@ using Post_Management.API.Repositories;
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Post_Management.API.Middlewares;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.FileProviders;
+using System.Text;
+using Post_Management.API.CustomActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +27,18 @@ builder.Logging.AddSerilog(logger); // Add Serilog as the logging provider
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new() { Title = "Learning_Web.API", Version = "v1" });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Post_Management.API",
+        Version = "v1",
+        Description = "A Blog Post Management API"
+    });
     options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -66,6 +77,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // add repositories
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
@@ -75,6 +87,22 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+// Add authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        };
+    });
 
 var app = builder.Build();
 
@@ -98,6 +126,13 @@ app.UseCors(options =>
 });
 
 app.UseAuthorization();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
+    // example: https://localhost:5001/Images/ => will show all images in the Images folder
+});
 
 app.MapControllers();
 

@@ -16,24 +16,16 @@ namespace Post_Management.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoryController(ICategoryRepository categoryRepository, IMapper mapper) : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
-
-        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
-        {
-            _categoryRepository = categoryRepository;
-            _mapper = mapper;
-        }
 
         //Get: 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
 
-            var paginatedResult = await _categoryRepository.GetAllCategories();
-            var categoryResponse = paginatedResult.Select(category => _mapper.Map<CategoryResponse>(category));
+            var paginatedResult = await categoryRepository.GetAllCategories();
+            var categoryResponse = paginatedResult.Select(category => mapper.Map<CategoryResponse>(category));
 
             var response = ApiResponseBuilder.BuildResponse(
                 statusCode: StatusCodes.Status200OK,
@@ -49,7 +41,7 @@ namespace Post_Management.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CategoryDTO valueDTO)
         {
-            var createdCategory = await _categoryRepository.CreateCategory(_mapper.Map<Category>(valueDTO));
+            var createdCategory = await categoryRepository.CreateCategory(mapper.Map<Category>(valueDTO));
 
             var response = ApiResponseBuilder.BuildResponse(
                 statusCode: 201, // Created status code
@@ -68,14 +60,14 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var category = await _categoryRepository.GetCategoryById(id);
+                var category = await categoryRepository.GetCategoryById(id);
                 if (category == null)
                 {
                     throw new NotFoundException("Category not found");
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: 200,
-                    data: _mapper.Map<CategoryResponse>(category),
+                    data: mapper.Map<CategoryResponse>(category),
                     message: "Category retrieved successfully");
                 return Ok(response);
             }
@@ -96,14 +88,14 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var category = await _categoryRepository.UpdateCategory(id, _mapper.Map<Category>(categoryDTO));
+                var category = await categoryRepository.UpdateCategory(id, mapper.Map<Category>(categoryDTO));
                 if (category == null)
                 {
                     throw new NotFoundException("Category not found");
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: 200,
-                    data: _mapper.Map<CategoryResponse>(category),
+                    data: mapper.Map<CategoryResponse>(category),
                     message: "Category updated successfully");
                 return Ok(response);
             }
@@ -123,14 +115,14 @@ namespace Post_Management.API.Controllers
         {
             try
             {
-                var category = await _categoryRepository.DeleteCategory(id);
+                var category = await categoryRepository.DeleteCategory(id);
                 if (category == null)
                 {
                     throw new NotFoundException("Category not found");
                 }
                 var response = ApiResponseBuilder.BuildResponse(
                     statusCode: 200,
-                    data: _mapper.Map<CategoryResponse>(category),
+                    data: mapper.Map<CategoryResponse>(category),
                     message: "Category deleted successfully");
                 return Ok(response);
             }
