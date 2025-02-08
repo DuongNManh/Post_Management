@@ -185,5 +185,33 @@ namespace Post_Management.API.Controllers
         {
             return await categoryRepository.ValidateCategories(categoryIds);
         }
+
+        [HttpGet]
+        [Route("url/{blogPostUrl}")]
+        public async Task<IActionResult> GetBlogPostByUrl(string blogPostUrl)
+        {
+            try
+            {
+                var blogPost = await blogPostRepository.GetBlogPostByUrl(blogPostUrl);
+                if (blogPost == null)
+                {
+                    throw new NotFoundException("Blog post not found");
+                }
+                var response = ApiResponseBuilder.BuildResponse(
+                    statusCode: StatusCodes.Status200OK,
+                    message: "Success",
+                    data: mapper.Map<BlogPostResponse>(blogPost)
+                    );
+                return Ok(response);
+            }
+            catch (NotFoundException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while processing your request", ex);
+            }
+        }
     }
 }

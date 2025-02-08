@@ -9,5 +9,6 @@ namespace Post_Management.API.Repositories
         public Task<BlogPost?> GetBlogPostById(Guid id);
         public Task<BlogPost?> DeleteBlogPost(Guid id);
         public Task<BlogPost?> UpdateBlogPost(Guid id, BlogPost blogPost);
+        public Task<BlogPost?> GetBlogPostByUrl(string urlHandle);
     }
 }

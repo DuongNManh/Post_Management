@@ -4,14 +4,9 @@ using Post_Management.API.Models.Domains;
 
 namespace Post_Management.API.Repositories
 {
-    public class BlogPostRepository : IBlogPostRepository
+    public class BlogPostRepository(ApplicationDbContext dbContext) : IBlogPostRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        public BlogPostRepository(ApplicationDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        private readonly ApplicationDbContext _dbContext = dbContext;
 
         public async Task<BlogPost> CreateBlogPost(BlogPost blogPost)
         {
@@ -72,6 +67,13 @@ namespace Post_Management.API.Repositories
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<BlogPost?> GetBlogPostByUrl(string urlHandle)
+        {
+            return await _dbContext.BlogPosts
+                .Include(x => x.Categories)
+                .FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
         }
 
         public async Task<BlogPost?> UpdateBlogPost(Guid id, BlogPost blogPost)

@@ -1,0 +1,44 @@
+networks:
+    postmanagement_network:
+        driver: bridge
+
+services:
+  post_management.api:
+    container_name: postmanagement-api
+    image: ${DOCKER_REGISTRY-}postmanagementapi
+    build:
+      context: .
+      dockerfile: Post_Management.API/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      post_management.db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgresConnection=Host=post_management.db;Database=PostManagementDB;Username=db_user;Password=Iloveyou3000!;Port=5432
+    networks:
+      - postmanagement_network
+
+  post_management.db:
+    container_name: postmanagement-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: Iloveyou3000!
+      POSTGRES_DB: PostManagementDB
+    ports:
+      - "5432:5432"
+    networks:
+      - postmanagement_network
+    volumes:
+      - post_management.db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U db_user -d PostManagementDB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  post_management.db_data:
