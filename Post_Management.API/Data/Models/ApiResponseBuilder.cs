@@ -1,4 +1,4 @@
-﻿namespace Post_Management.API.Models
+﻿namespace Post_Management.API.Data.Models
 {
     public class ApiResponseBuilder
     {

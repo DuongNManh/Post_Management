@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Post_Management.API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Post_Management.API.Converter;
 using Post_Management.API.Repositories;
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ using Post_Management.API.Middlewares;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.FileProviders;
 using System.Text;
-using Post_Management.API.CustomActionFilters;
+using Post_Management.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,7 +80,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         });
 });
 
-// add repositories
+// add repositories by dependency injection
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
@@ -116,7 +115,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.ApplyMigrations();
+    app.ApplyMigrations(); // apply migration when start project
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -134,6 +133,7 @@ app.UseCors(options =>
 });
 
 app.UseAuthorization();
+
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(

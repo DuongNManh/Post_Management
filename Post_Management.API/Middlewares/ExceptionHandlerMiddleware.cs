@@ -1,4 +1,4 @@
-﻿using Post_Management.API.Models;
+﻿using Post_Management.API.Data.Models;
 using Post_Management.API.Exceptions;
 using System.Net;
 

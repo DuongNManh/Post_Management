@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Post_Management.API.Models;
+using Post_Management.API.Data.Models;
 
-namespace Post_Management.API.CustomActionFilters
+namespace Post_Management.API.Extensions
 {
+    // this class is response for return valid the Request Model before they access the endpoint
+    // will return all the field that not valid to the swagger
     public class ValidateModelAttributes : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)

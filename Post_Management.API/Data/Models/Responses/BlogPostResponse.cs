@@ -1,7 +1,7 @@
-﻿using Post_Management.API.Models.Domains;
+﻿using Post_Management.API;
 using System.Text.Json.Serialization;
 
-namespace Post_Management.API.Models.Responses
+namespace Post_Management.API.Data.Models.Responses
 {
     public class BlogPostResponse
     {

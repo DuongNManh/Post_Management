@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Post_Management.API.Models.DTOs
+namespace Post_Management.API.Data.Models.DTOs
 {
     public class BlogPostDTO
     {
         //[Required]
-        [MinLength(length: 3, ErrorMessage ="Min length title is 3")]
+        [MinLength(length: 3, ErrorMessage = "Min length title is 3")]
         [MaxLength(length: 100, ErrorMessage = "Max length title is 100")]
         [JsonPropertyName("title")]
         public string Title { get; set; }

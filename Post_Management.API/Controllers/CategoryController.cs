@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Post_Management.API.Data;
-using Post_Management.API.Models.DTOs;
-using Post_Management.API.Models.Domains;
 using Post_Management.API.Repositories;
-using Post_Management.API.Models;
-using Post_Management.API.CustomActionFilters;
+using Post_Management.API.Extensions;
 using Post_Management.API.Exceptions;
-using Post_Management.API.Models.Responses;
+using Post_Management.API.Data.Models;
+using Post_Management.API.Data.Models.Domains;
+using Post_Management.API.Data.Models.DTOs;
+using Post_Management.API.Data.Models.Responses;
 
 namespace Post_Management.API.Controllers
 {

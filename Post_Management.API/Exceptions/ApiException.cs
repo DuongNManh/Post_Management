@@ -2,6 +2,7 @@
 
 namespace Post_Management.API.Exceptions
 {
+    // all the Error or Bad request will using there Exception below
     public class ApiException : Exception
     {
         public HttpStatusCode StatusCode { get; }

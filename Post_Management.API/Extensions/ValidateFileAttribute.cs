@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Post_Management.API.Models;
+using Post_Management.API.Data.Models;
 
-namespace Post_Management.API.CustomActionFilters
+namespace Post_Management.API.Extensions
 {
+    // this class is handle valid before access the controller endpoint of upload image
     public class ValidateFileAttribute : ActionFilterAttribute
     {
         private readonly int _maxSizeInMB;

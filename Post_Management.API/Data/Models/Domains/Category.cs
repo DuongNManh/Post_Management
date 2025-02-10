@@ -1,8 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿using AutoMapper.Configuration.Annotations;
+using System.Text.Json.Serialization;
 
-namespace Post_Management.API.Models.Responses
+namespace Post_Management.API.Data.Models.Domains
 {
-    public class CategoryResponse
+    public class Category
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
@@ -10,5 +11,7 @@ namespace Post_Management.API.Models.Responses
         public string Name { get; set; }
         [JsonPropertyName("url_handle")]
         public string UrlHandle { get; set; }
+        [JsonIgnore]
+        public ICollection<BlogPost> BlogPosts { get; set; }
     }
 }

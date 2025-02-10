@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Post_Management.API.Models.Domains
+namespace Post_Management.API.Data.Models.Domains
 {
     public class BlogPost
     {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Post_Management.API.Data;
 
-namespace Post_Management.API.Middlewares
+namespace Post_Management.API.Extensions
 {
     public static class ApplyMigration
     {

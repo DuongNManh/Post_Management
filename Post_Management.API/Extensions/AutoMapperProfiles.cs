@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Post_Management.API.Models.Domains;
-using Post_Management.API.Models.DTOs;
-using Post_Management.API.Models.Responses;
+using Post_Management.API.Data.Models.Domains;
+using Post_Management.API.Data.Models.DTOs;
+using Post_Management.API.Data.Models.Responses;
 using Post_Management.API.Repositories;
 
-namespace Post_Management.API.Converter
+namespace Post_Management.API.Extensions
 {
     public class AutoMapperProfiles : Profile
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Post_Management.API.Models.Domains;
+using Post_Management.API.Data.Models.Domains;
 
 namespace Post_Management.API.Data
 {
