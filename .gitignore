@@ -384,10 +384,6 @@ FodyWeavers.xsd
 **/testem.log
 **/typings/
 
-# Environment files
-**/environments/*.ts
-!**/environments/environment.template.ts
-
 # IDE - VSCode
 **/.vscode/*
 !**/.vscode/settings.json

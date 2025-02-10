@@ -72,6 +72,26 @@ For local development without Docker:
     dotnet run
 ```
 
+## Environment Setup
+
+1. Frontend Environment Configuration:
+```bash
+# Navigate to UI project
+cd Post_Management.UI/src/environments
+
+# Copy template to create environment files
+cp environment.template.ts environment.ts
+cp environment.template.ts environment.development.ts
+cp environment.template.ts environment.production.ts
+```
+
+2. Update the environment files with your specific configurations:
+   - `environment.ts` - Default environment
+   - `environment.development.ts` - Development environment
+   - `environment.production.ts` - Production environment
+
+Note: Environment files are git-ignored for security. Make sure to set them up locally after cloning.
+
 ## License
 
 This project is licensed under the Unlicense - see the [LICENSE.txt](LICENSE.txt) file for details.
