@@ -1,58 +1,61 @@
-# PostManagementUI
+# Post Management UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+Frontend application for the blog post management system built with Angular 19.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Modern UI with Tailwind CSS
+- Markdown support for blog posts
+- Responsive design
+- Dark mode support
+- Image management
+- Category management
+
+## Project Structure
+
+- `src/app/core/` - Core components and services
+- `src/app/features/` - Feature modules
+  - `blog-post/` - Blog post management
+  - `public/` - Public-facing components
+- `src/environments/` - Environment configurations
+
+## Development
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start development server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+3. Build for production:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Testing
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Run unit tests:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Docker
 
-For end-to-end (e2e) testing, run:
+Build the container:
 
 ```bash
-ng e2e
+docker build -t postmanagement-ui .
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The application uses nginx for serving in production, configured in `nginx.conf`.
 
 ## Additional Resources
 
