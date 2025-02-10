@@ -12,7 +12,7 @@ using Post_Management.API.Data;
 namespace Post_Management.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250208162150_InitDb")]
+    [Migration("20250210075324_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -40,78 +40,93 @@ namespace Post_Management.API.Migrations
                     b.ToTable("BlogPostCategory");
                 });
 
-            modelBuilder.Entity("Post_Management.API.Models.Domains.BlogImage", b =>
+            modelBuilder.Entity("Post_Management.API.Data.Models.Domains.BlogImage", b =>
                 {
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("date_created");
 
                     b.Property<string>("FileExtension")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("file_extension");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("file_name");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("title");
 
                     b.Property<string>("URl")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("url");
 
                     b.HasKey("id");
 
                     b.ToTable("BlogImages");
                 });
 
-            modelBuilder.Entity("Post_Management.API.Models.Domains.BlogPost", b =>
+            modelBuilder.Entity("Post_Management.API.Data.Models.Domains.BlogPost", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
+                        .HasColumnName("id")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("author")
                         .HasAnnotation("Relational:JsonPropertyName", "author");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("content")
                         .HasAnnotation("Relational:JsonPropertyName", "content");
 
                     b.Property<string>("FeaturedImageUrl")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("featured_image_url")
                         .HasAnnotation("Relational:JsonPropertyName", "featured_image_url");
 
                     b.Property<bool>("IsVisible")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_visible");
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("timestamp with time zone")
+                        .HasColumnName("publish_date")
                         .HasAnnotation("Relational:JsonPropertyName", "publish_date");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("short_description")
                         .HasAnnotation("Relational:JsonPropertyName", "short_description");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("title")
                         .HasAnnotation("Relational:JsonPropertyName", "title");
 
                     b.Property<string>("UrlHandle")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("url_handle")
                         .HasAnnotation("Relational:JsonPropertyName", "url_handle");
 
                     b.HasKey("Id");
@@ -119,21 +134,24 @@ namespace Post_Management.API.Migrations
                     b.ToTable("BlogPosts");
                 });
 
-            modelBuilder.Entity("Post_Management.API.Models.Domains.Category", b =>
+            modelBuilder.Entity("Post_Management.API.Data.Models.Domains.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
+                        .HasColumnName("id")
                         .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("name")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
                     b.Property<string>("UrlHandle")
                         .IsRequired()
                         .HasColumnType("text")
+                        .HasColumnName("url_handle")
                         .HasAnnotation("Relational:JsonPropertyName", "url_handle");
 
                     b.HasKey("Id");
@@ -143,13 +161,13 @@ namespace Post_Management.API.Migrations
 
             modelBuilder.Entity("BlogPostCategory", b =>
                 {
-                    b.HasOne("Post_Management.API.Models.Domains.BlogPost", null)
+                    b.HasOne("Post_Management.API.Data.Models.Domains.BlogPost", null)
                         .WithMany()
                         .HasForeignKey("BlogPostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Post_Management.API.Models.Domains.Category", null)
+                    b.HasOne("Post_Management.API.Data.Models.Domains.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)

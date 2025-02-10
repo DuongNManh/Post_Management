@@ -77,6 +77,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 maxRetryCount: 5,
                 maxRetryDelay: TimeSpan.FromSeconds(30),
                 errorCodesToAdd: null);
+
+            // Add this line to ensure UTC timestamps
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         });
 });
 
@@ -115,7 +118,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.ApplyMigrations(); // apply migration when start project
+    // Only apply migrations if explicitly enabled in configuration
+    if (builder.Configuration.GetValue<bool>("ApplyMigrations", false))
+    {
+        app.ApplyMigrations();
+    }
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }

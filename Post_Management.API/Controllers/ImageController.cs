@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Post_Management.API.CustomActionFilters;
+using Post_Management.API.Extensions;
 using Post_Management.API.Data.Models;
 using Post_Management.API.Data.Models.Domains;
 using Post_Management.API.Data.Models.DTOs;

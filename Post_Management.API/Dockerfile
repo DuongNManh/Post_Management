@@ -27,4 +27,7 @@ RUN dotnet publish "./Post_Management.API.csproj" -c $BUILD_CONFIGURATION -o /ap
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# Create Images directory
+RUN mkdir -p /app/Images && \
+    chmod 777 /app/Images
 ENTRYPOINT ["dotnet", "Post_Management.API.dll"]
