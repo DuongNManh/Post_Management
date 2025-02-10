@@ -3,6 +3,17 @@ networks:
         driver: bridge
 
 services:
+  post_management.ui:
+    container_name: postmanagement-ui
+    build:
+      context: ./Post_Management.UI
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - post_management.api
+    networks:
+      - postmanagement_network
   post_management.api:
     container_name: postmanagement-api
     image: ${DOCKER_REGISTRY-}postmanagementapi
@@ -20,7 +31,6 @@ services:
       - ConnectionStrings__PostgresConnection=Host=post_management.db;Database=PostManagementDB;Username=db_user;Password=Iloveyou3000!;Port=5432
     networks:
       - postmanagement_network
-
   post_management.db:
     container_name: postmanagement-db
     image: postgres:latest

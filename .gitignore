@@ -362,5 +362,34 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-.Post_Management.UI/
+# Angular/Node specific
+**/node_modules/
+**/.angular/
+**/dist/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+**/.sass-cache/
+**/connect.lock/
+**/coverage/
+**/libpeerconnection.log
+**/testem.log
+**/typings/
+
+# Environment files
+**/environments/*.ts
+!**/environments/environment.template.ts
+
+# IDE - VSCode
+**/.vscode/*
+!**/.vscode/settings.json
+!**/.vscode/tasks.json
+!**/.vscode/launch.json
+!**/.vscode/extensions.json
+.history/*
+
+# System Files
+**/.DS_Store
+**/Thumbs.db
+
 Images/
