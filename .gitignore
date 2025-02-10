@@ -59,47 +59,55 @@ dlldata.c
 BenchmarkDotNet.Artifacts/
 
 # .NET Core
-project.lock.json
-project.fragment.lock.json
-artifacts/
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.userprefs
 
-# ASP.NET Scaffolding
-ScaffoldingReadMe.txt
+# Dependencies
+**/node_modules/
+**/dist/
+**/.angular/cache/
 
-# StyleCop
-StyleCopReport.xml
+# IDE
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# Files built by Visual Studio
-*_i.c
-*_p.c
-*_h.h
-*.ilk
-*.meta
-*.obj
-*.iobj
-*.pch
-*.pdb
-*.ipdb
-*.pgc
-*.pgd
-*.rsp
-*.sbr
-*.tlb
-*.tli
-*.tlh
-*.tmp
-*.tmp_proj
-*_wpftmp.csproj
-*.log
-*.vspscc
-*.vssscc
-.builds
-*.pidb
-*.svclog
-*.scc
+# Environment files
+**/environments/*.ts
+!**/environments/environment.template.ts
 
-# Chutzpah Test files
-_Chutzpah*
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Testing
+**/coverage/
+**/TestResults/
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Keep specific VS Code files
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # Visual C++ cache files
 ipch/

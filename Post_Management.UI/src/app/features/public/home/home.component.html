@@ -1,0 +1,44 @@
+<div class="container mx-auto dark:bg-gray-600 dark:text-white">
+  <div class="my-5" *ngIf="blogPosts$ | async as blogPosts">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let post of blogPosts.data">
+        <div
+          class="bg-white dark:bg-gray-600 dark:text-white shadow-lg rounded-lg p-6 transition-transform transform hover:scale-105 hover:bg-gray-200"
+          [routerLink]="['/blog', post.url_handle]"
+        >
+          <div class="flex items-center space-x-3 mb-3">
+            <div
+              *ngFor="
+                let category of post.categories.slice(0, 2);
+                let i = index
+              "
+              class="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium bg-blue-200 dark:bg-blue-600 text-blue-900 dark:text-blue-200"
+            >
+              {{ category.name }}
+            </div>
+            <div
+              *ngIf="post.categories.length > 2"
+              class="inline-flex items-center px-4 py-1 rounded-full text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+            >
+              +{{ post.categories.length - 2 }}
+            </div>
+          </div>
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
+            {{ post.title }}
+          </h1>
+          <p class="text-gray-600 dark:text-gray-400">
+            {{ post.short_description }}
+          </p>
+          <img
+            src="{{ post.featured_image_url }}"
+            alt="{{ post.title }}"
+            class="rounded-md mt-2"
+          />
+          <p class="text-gray-600 dark:text-gray-400 font-semibold italic">
+            {{ post.author }} - {{ post.publish_date | date : "medium" }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

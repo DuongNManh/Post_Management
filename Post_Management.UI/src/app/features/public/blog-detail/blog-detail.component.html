@@ -1,0 +1,44 @@
+<div
+  *ngIf="blogPost"
+  class="max-w-6xl mx-auto p-6 m-10 bg-white shadow-lg rounded-lg"
+>
+  <h1 class="text-3xl font-extrabold text-gray-900 mb-2">
+    {{ blogPost.title }}
+  </h1>
+  <p class="text-gray-500 dark:text-gray-400 mb-4">
+    {{ blogPost.author }} - {{ blogPost.publish_date | date : "medium" }}
+  </p>
+  <div class="flex items-center space-x-3 mb-4">
+    <div
+      *ngFor="let category of blogPost.categories.slice(0, 2); let i = index"
+      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 dark:bg-blue-700 text-blue-800 dark:text-blue-200"
+    >
+      {{ category.name }}
+    </div>
+    <div
+      *ngIf="blogPost.categories.length > 2"
+      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-300"
+    >
+      +{{ blogPost.categories.length - 2 }}
+    </div>
+  </div>
+  <p class="text-lg text-gray-700 dark:text-gray-300 mb-4">
+    {{ blogPost.short_description }}
+  </p>
+  <div class="mt-4">
+    <p class="text-gray-800 dark:text-gray-200">{{ blogPost.content }}</p>
+  </div>
+  <img
+    src="{{ blogPost.featured_image_url }}"
+    alt="{{ blogPost.title }}"
+    class="rounded-lg mt-4 w-full h-auto shadow-md"
+  />
+  <p class="text-gray-500 dark:text-gray-400 font-semibold italic mt-4">
+    {{ blogPost.author }} - {{ blogPost.publish_date | date : "medium" }}
+  </p>
+  <a routerLink="/" class="text-blue-500 hover:underline mb-4">Back to Home</a>
+</div>
+
+<ng-template #loading>
+  <p class="text-center text-gray-500">Loading blog post...</p>
+</ng-template>
