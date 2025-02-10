@@ -22,9 +22,8 @@ A full-stack blog management system built with .NET 8 Web API, Angular 19, and P
 ```
 
 
-2. Start the application using Docker 
+2. Start the application using Docker Compose:
 ```bash
-    Compose:
     docker-compose up -d
 ```
 
