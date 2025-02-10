@@ -79,9 +79,6 @@ obj/
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# Environment files
-**/environments/*.ts
-!**/environments/environment.template.ts
 
 # Build results
 [Dd]ebug/
