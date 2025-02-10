@@ -20,17 +20,18 @@ A full-stack blog management system built with .NET 8 Web API, Angular 19, and P
     git clone <repository-url>
     cd Post_Management
 ```
-1.5 Access to the Post_Management.API/appsetting.json
-    set ApplyMigration: false to true (Enable auto EF Core Migration)
-    next time build the Apllication:
-    set ApplyMigration: true to false (Using existing DB)
+2. Access to the Post_Management.API/appsetting.json
+    - first time build the Application:
+        - set ApplyMigration: false to true (Enable auto EF Core Migration)
+    - next time build the Apllication:
+        - set ApplyMigration: true to false (Using existing DB)
 
-2. Start the application using Docker Compose:
+3. Start the application using Docker Compose:
 ```bash
     docker-compose up -d
 ```
 
-3. Access the applications:
+4. Access the applications:
 - Frontend: http://localhost:80
 - Backend API & Swagger: http://localhost:5000/swagger
 - Database: localhost:5432 (PostgreSQL)
