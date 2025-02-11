@@ -53,6 +53,18 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - post_management.db
+    networks:
+      - postmanagement_network
 
 volumes:
   post_management.db_data:
