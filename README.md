@@ -55,6 +55,9 @@ The application consists of three main services:
    - Runs on port 5432
    - Stores blog posts, categories, and images
 
+4. **pgAdmin (DBMS)**
+   - Runs on port 5050
+
 ## Development
 
 For local development without Docker:
