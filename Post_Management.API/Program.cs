@@ -113,6 +113,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Update the Kestrel configuration
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(5000); // HTTP
+    serverOptions.ListenAnyIP(5001, listenOptions =>
+    {
+        // In development/docker, we'll use HTTP instead of HTTPS
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -131,7 +142,7 @@ if (app.Environment.IsDevelopment())
 // Add the ExceptionHandlerMiddleware to the pipeline
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseCors(options =>
 {

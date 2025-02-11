@@ -28,13 +28,13 @@ services:
         condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000;http://+:5001
       - ConnectionStrings__PostgresConnection=Host=post_management.db;Database=PostManagementDB;Username=db_user;Password=Iloveyou3000!;Port=5432
-      - EXTERNAL_API_HOST=localhost:5001
+      - EXTERNAL_API_HOST=localhost:5000
     networks:
       - postmanagement_network
     volumes:
       - post_management.images:/app/Images
-      - ~/.aspnet/https:/https:ro  # Mount SSL certificates
   post_management.db:
     container_name: postmanagement-db
     image: postgres:latest
