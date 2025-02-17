@@ -41,7 +41,7 @@ jobs:
 
     - name: Start Docker Containers
       run: |
-        docker-compose -f docker-compose.yml up -d  # Start the containers in detached mode
+        docker-compose -f docker-compose.yml up -d --remove-orphans  # Start the containers in detached mode
 
     - name: Run Tests (Optional)
       run: |
