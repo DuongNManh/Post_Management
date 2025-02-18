@@ -1,0 +1,56 @@
+name: Docker Compose Build and Deploy
+
+on:
+  push:
+    branches:
+      - master  # You can change this to your preferred branch
+  pull_request:
+    branches:
+      - master  # You can change this to your preferred branch
+
+jobs:
+  docker-build-deploy:
+    runs-on: self-hosted  # Use your self-hosted runner
+
+    services:
+      docker:
+        image: docker:19.03.12-dind  # Docker-in-Docker image for building images
+        options: --privileged  # Required for DinD to work properly
+        ports:
+          - 2375:2375
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v4
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Set up Docker Build and Compose
+      run: |
+        docker-compose -v  # Verify that Docker Compose is available
+        docker-compose -f docker-compose.yml build  # Build the services defined in your docker-compose.yml
+
+    - name: Start Docker Containers
+      run: |
+        docker-compose -f docker-compose.yml up -d --remove-orphans  # Start the containers in detached mode
+
+    - name: Run Tests (Optional)
+      run: |
+        # Run tests inside your containers if needed
+        # Example:
+        # docker exec postmanagement-api npm run test
+        echo "Running tests... (if any)"
+      
+    - name: Tear Down Containers
+      if: always()
+      run: |
+        docker-compose -f docker-compose.yml down  # Stop and remove containers after use

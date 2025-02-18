@@ -9,7 +9,7 @@ services:
       context: ./Post_Management.UI
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "0.0.0.0:4200:4200"
     depends_on:
       - post_management.api
     networks:
@@ -21,8 +21,8 @@ services:
       context: .
       dockerfile: Post_Management.API/Dockerfile
     ports:
-      - "5000:5000"
-      - "5001:5001"
+      - "0.0.0.0:5000:5000"
+      - "0.0.0.0:5001:5001"
     depends_on:
       post_management.db:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
       POSTGRES_PASSWORD: Iloveyou3000!
       POSTGRES_DB: PostManagementDB
     ports:
-      - "5432:5432"
+      - "0.0.0.0:5432:5432"
     networks:
       - postmanagement_network
     volumes:
@@ -57,7 +57,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4
     ports:
-      - "5050:80"
+      - "0.0.0.0:5050:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
