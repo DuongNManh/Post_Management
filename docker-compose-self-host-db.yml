@@ -1,0 +1,38 @@
+networks:
+    postmanagement_network:
+        driver: bridge
+
+services:
+  post_management.ui:
+    container_name: postmanagement-ui
+    build:
+      context: ./Post_Management.UI
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:4200:4200"
+    depends_on:
+      - post_management.api
+    networks:
+      - postmanagement_network
+  post_management.api:
+    container_name: postmanagement-api
+    image: ${DOCKER_REGISTRY-}postmanagementapi
+    build:
+      context: .
+      dockerfile: Post_Management.API/Dockerfile
+    ports:
+      - "0.0.0.0:5000:5000"
+      - "0.0.0.0:5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000;http://+:5001
+      - ConnectionStrings__PostgresConnection=Host=192.168.88.154;Database=PostManagementDB;Username=casaos;Password=casaos;Port=5432
+      - EXTERNAL_API_HOST=localhost:5000
+    networks:
+      - postmanagement_network
+    volumes:
+      - post_management.images:/app/Images
+
+volumes:
+  post_management.db_data:
+  post_management.images:

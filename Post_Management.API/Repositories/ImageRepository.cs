@@ -30,7 +30,7 @@ namespace Post_Management.API.Repositories
 
                 // For Docker environment, use localhost for external access
                 var externalHost = configuration["EXTERNAL_API_HOST"] ?? "localhost:5001";
-                var urlPath = $"https://{externalHost}/Images/{image.id}{image.FileExtension}";
+                var urlPath = $"http://{externalHost}/Images/{image.id}{image.FileExtension}";
                 image.URl = urlPath;
 
                 // Ensure DateCreated is in UTC
