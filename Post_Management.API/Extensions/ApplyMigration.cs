@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Post_Management.API.Data;
+using Post_Management.API.Data.Seeders;
 
 namespace Post_Management.API.Extensions
 {
@@ -38,6 +39,25 @@ namespace Post_Management.API.Extensions
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
                 logger.LogError(ex, "An error occurred while migrating the database.");
                 throw;
+            }
+        }
+
+        public static async Task SeedDatabaseAsync(this IApplicationBuilder app)
+        {
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
+            using ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            try
+            {
+                await DatabaseSeeder.SeedAsync(context);
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
+                logger.LogInformation("Database seeding completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
+                logger.LogError(ex, "An error occurred while seeding the database.");
+                // Don't throw here - seeding failures shouldn't prevent app startup
             }
         }
     }

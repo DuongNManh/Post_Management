@@ -40,6 +40,8 @@ services:
       - Jwt__Issuer=${JWT_ISSUER:-PostManagementAPI}
       - Jwt__Audience=${JWT_AUDIENCE:-PostManagementUI}
       - EXTERNAL_API_HOST=${EXTERNAL_API_HOST:-localhost}
+      - ApplyMigrations=${APPLY_MIGRATIONS:-true}
+      - SeedDatabase=${SEED_DATABASE:-false}
     networks:
       - postmanagement_network
     volumes:

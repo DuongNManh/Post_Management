@@ -129,11 +129,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // Only apply migrations if explicitly enabled in configuration
-    if (builder.Configuration.GetValue<bool>("ApplyMigrations", false))
-    {
-        app.ApplyMigrations();
-    }
+
+}
+
+// Only apply migrations if explicitly enabled in configuration
+if (builder.Configuration.GetValue<bool>("ApplyMigrations", false))
+{
+    app.ApplyMigrations();
+}
+
+// Seed database with sample data (only if enabled in configuration)
+if (builder.Configuration.GetValue<bool>("SeedDatabase", false))
+{
+    await app.SeedDatabaseAsync();
 }
 
 app.UseSwagger();
