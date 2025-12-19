@@ -1,0 +1,50 @@
+networks:
+  postmanagement_network:
+    driver: bridge
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: postmanagement-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/production/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d/proxy_headers.conf:/etc/nginx/conf.d/proxy_headers.conf
+      - ./nginx/conf.d/ssl.conf:/etc/nginx/conf.d/ssl.conf
+      - ./ssl:/etc/ssl/private  # Mount SSL certificates if available
+    depends_on:
+      - post_management.ui
+      - post_management.api
+    networks:
+      - postmanagement_network
+    restart: unless-stopped
+
+  post_management.ui:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/post-management-ui:latest
+    container_name: postmanagement-ui
+    networks:
+      - postmanagement_network
+    restart: unless-stopped
+
+  post_management.api:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/post-management-api:latest
+    container_name: postmanagement-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__PostgresConnection=${DB_CONNECTION_STRING}
+      - Jwt__Key=${JWT_SECRET}
+      - Jwt__Issuer=${JWT_ISSUER:-PostManagementAPI}
+      - Jwt__Audience=${JWT_AUDIENCE:-PostManagementUI}
+      - EXTERNAL_API_HOST=${EXTERNAL_API_HOST:-localhost}
+    networks:
+      - postmanagement_network
+    volumes:
+      - post_management_images:/app/Images
+    restart: unless-stopped
+
+volumes:
+  post_management_images:

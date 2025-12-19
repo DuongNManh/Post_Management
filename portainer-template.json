@@ -1,0 +1,59 @@
+{
+    "version": "2",
+    "templates": [
+        {
+            "type": 3,
+            "title": "Post Management Application",
+            "description": "Full-stack web application with .NET API and Angular UI",
+            "note": "Deploy the complete Post Management system with PostgreSQL database",
+            "categories": [
+                "Web",
+                "Database"
+            ],
+            "platform": "linux",
+            "logo": "https://raw.githubusercontent.com/docker/compose/master/logo.png",
+            "repository": {
+                "url": "https://github.com/DuongNManh/Post_Management",
+                "stackfile": "docker-compose.production.yml"
+            },
+            "env": [
+                {
+                    "name": "GITHUB_REPOSITORY_OWNER",
+                    "label": "GitHub Repository Owner",
+                    "description": "GitHub username or organization name",
+                    "default": "DuongNManh"
+                },
+                {
+                    "name": "DB_CONNECTION_STRING",
+                    "label": "External PostgreSQL Connection String",
+                    "description": "Complete PostgreSQL connection string to your existing database server",
+                    "default": "Host=your-postgres-server;Database=PostManagementDB;Username=your-user;Password=your-password;Port=5432"
+                },
+                {
+                    "name": "JWT_SECRET",
+                    "label": "JWT Secret Key",
+                    "description": "Secret key for JWT token signing (minimum 32 characters)",
+                    "default": ""
+                },
+                {
+                    "name": "JWT_ISSUER",
+                    "label": "JWT Issuer",
+                    "description": "JWT token issuer",
+                    "default": "PostManagementAPI"
+                },
+                {
+                    "name": "JWT_AUDIENCE",
+                    "label": "JWT Audience",
+                    "description": "JWT token audience",
+                    "default": "PostManagementUI"
+                },
+                {
+                    "name": "EXTERNAL_API_HOST",
+                    "label": "External API Host",
+                    "description": "Domain name for external API access",
+                    "default": "localhost"
+                }
+            ]
+        }
+    ]
+}

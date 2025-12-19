@@ -3,6 +3,15 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Production secrets and environment files
+.env
+.env.local
+.env.production
+*.pem
+*.key
+backups/
+deployment/
+
 # User-specific files
 *.rsuser
 *.suo

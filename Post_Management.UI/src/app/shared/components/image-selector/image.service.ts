@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { ImageDTO, ImageModel } from '../models/ImageModel';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ApiResponse } from '../../../core/models/api-response';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
-  private image_base = environment.api_dev_base_url + '/Image';
+  private image_base = environment.api_base_url + '/Image';
   selectedImage: BehaviorSubject<ImageModel> = new BehaviorSubject<ImageModel>({
     id: '',
     fileName: '',
@@ -20,9 +20,9 @@ export class ImageService {
   });
 
   constructor(private http: HttpClient) {
-   }
+  }
 
-  uploadImage(formData: FormData): Observable<ApiResponse<ImageModel>>{
+  uploadImage(formData: FormData): Observable<ApiResponse<ImageModel>> {
     return this.http.post<ApiResponse<ImageModel>>(this.image_base, formData);
   }
 
@@ -38,5 +38,5 @@ export class ImageService {
   onSelectedImage(): Observable<ImageModel> {
     return this.selectedImage?.asObservable();
   }
-    
+
 }

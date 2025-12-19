@@ -3,13 +3,13 @@ import { CategoryDTO, CategoryModel } from '../models/CategoryModel';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../../../core/models/api-response';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private category_base = environment.api_dev_base_url + '/category';
+  private category_base = environment.api_base_url + '/category';
 
   constructor(private http: HttpClient) { }
 

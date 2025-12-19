@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ApiResponse } from '../../../core/models/api-response';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../../environments/environment';
 import { BlogPostDTO, BlogPostModel } from '../models/BlogPostModel';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogPostService {
-  private blog_post_base = environment.api_dev_base_url + '/BlogPost';
+  private blog_post_base = environment.api_base_url + '/BlogPost';
 
   constructor(private http: HttpClient) { }
 

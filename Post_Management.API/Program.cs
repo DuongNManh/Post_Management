@@ -134,10 +134,10 @@ if (app.Environment.IsDevelopment())
     {
         app.ApplyMigrations();
     }
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Add the ExceptionHandlerMiddleware to the pipeline
 app.UseMiddleware<ExceptionHandlerMiddleware>();

@@ -1,3 +1,4 @@
 export const environment = {
-    api_base_url: '/api',
+    production: true,
+    api_base_url: '/api'
 };
