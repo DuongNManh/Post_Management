@@ -23,14 +23,14 @@ services:
     restart: unless-stopped
 
   post_management.ui:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/post-management-ui:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/post_management-ui:latest
     container_name: postmanagement-ui
     networks:
       - postmanagement_network
     restart: unless-stopped
 
   post_management.api:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/post-management-api:latest
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/post_management-api:latest
     container_name: postmanagement-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
