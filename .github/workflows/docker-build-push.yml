@@ -145,24 +145,27 @@ jobs:
           sleep 30
 
       - name: Trigger Portainer Webhook
-        if: secrets.PORTAINER_WEBHOOK_URL != ''
         run: |
-          echo "🚀 Triggering Portainer webhook..."
-          response=$(curl -s -w "\n%{http_code}" -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -d '{"repository": "${{ github.repository }}", "tag": "latest"}')
-          
-          http_code=$(echo "$response" | tail -n1)
-          response_body=$(echo "$response" | head -n -1)
-          
-          echo "HTTP Code: $http_code"
-          echo "Response: $response_body"
-          
-          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
-            echo "✅ Webhook triggered successfully!"
+          if [ -z "${{ secrets.PORTAINER_WEBHOOK_URL }}" ]; then
+            echo "⚠️ No Portainer webhook URL configured - skipping auto-deployment"
           else
-            echo "❌ Webhook failed with code: $http_code"
-            exit 1
+            echo "🚀 Triggering Portainer webhook..."
+            response=$(curl -s -w "\n%{http_code}" -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}" \
+              -H "Content-Type: application/json" \
+              -d '{"repository": "${{ github.repository }}", "tag": "latest"}')
+            
+            http_code=$(echo "$response" | tail -n1)
+            response_body=$(echo "$response" | head -n -1)
+            
+            echo "HTTP Code: $http_code"
+            echo "Response: $response_body"
+            
+            if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+              echo "✅ Webhook triggered successfully!"
+            else
+              echo "❌ Webhook failed with code: $http_code"
+              exit 1
+            fi
           fi
 
       - name: Deployment Success Notification
